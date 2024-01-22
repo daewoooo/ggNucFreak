@@ -1,0 +1,42 @@
+Package: ggNucFreak
+Type: Package
+Title: Visualisation of various BAM file features
+Version: 0.99.0
+Authors@R: 
+    person(given = "David",
+           family = "Porubsky",
+           role = c("aut", "cre"),
+           email = "david.porubsky@gmail.com",
+           comment = c(ORCID = "0000-0001-8414-8966"))                 
+Description: TODO.
+Depends:
+  R (>= 4.3.0)
+Imports:
+  ggplot2 (>= 3.4.0),
+  scales,
+  S4Vectors,
+  methods,
+  GenomicRanges,
+  GenomicAlignments (>= 1.34.0),
+  BSgenome,
+  Biostrings,
+  IRanges,
+  GenomeInfoDb,
+  Rsamtools,
+  dplyr,
+  magrittr,
+  utils
+Suggests:
+  BSgenome.Hsapiens.UCSC.hg38,
+  BiocStyle,
+  testthat,
+  knitr,
+  rmarkdown
+License: file LICENSE
+Encoding: UTF-8
+LazyLoad: yes
+VignetteBuilder: knitr
+biocViews: Software, GenomicVariation, StructuralVariation, VariantDetection, GenomeAnnotation, Sequencing, WholeGenome
+URL: https://github.com/daewoooo/ggNucFreak
+BugReports: https://github.com/daewoooo/ggNucFreak/issues
+RoxygenNote: 7.2.3
