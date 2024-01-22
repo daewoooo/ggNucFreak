@@ -1,5 +1,8 @@
 #' Function to plot methylated cytosines from the BAM file in forward reference coordinates.
 #'
+#' This function takes loaded methylation porfiles using \code{\link{extractMethylCs}} function and visualize them 
+#' using basic \pkg{ggplot2} functions. 
+#'
 #' @param by.phase Set to \code{TRUE} if the methylation should be plotted separated by haplotypes.
 #' @param highlight.pos A vector of x-axis coordinates to be highlighted by the a solid line.
 #' @param highlight.gr A \code{\link{GRanges-class}} object of all regions to be highlighted by a transparent rectangle.

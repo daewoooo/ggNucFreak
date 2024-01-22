@@ -1,7 +1,7 @@
 #' Function to extract positions of methylated cytosines from the BAM file in forward reference coordinates.
 #'
-#' @param bamfile A path to BAM containing methylation specific tags (MM and ML).
-#' @param bamindex A path to BAM file index. By default index file is expected to be present in the same directory. If not present it will be created.
+#' @param bamfile A path to a BAM file containing methylation specific tags (MM and ML).
+#' @param bamindex A path to the BAM file index. By default index file is expected to be present in the same directory. If not present it will be created.
 #' @param region A user defined region from where the methylation data will be extracted.
 #' @param min.mapq A minimum mapping quality of aligned reads to be extracted from provided BAM file.
 #' @param add.phase Set to \code{TRUE} if phasing specific tag 'HP' should be added if defined in the BAM file.

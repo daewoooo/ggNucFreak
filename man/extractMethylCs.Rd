@@ -13,9 +13,9 @@ extractMethylCs(
 )
 }
 \arguments{
-\item{bamfile}{A path to BAM containing methylation specific tags (MM and ML).}
+\item{bamfile}{A path to a BAM file containing methylation specific tags (MM and ML).}
 
-\item{bamindex}{A path to BAM file index. By default index file is expected to be present in the same directory. If not present it will be created.}
+\item{bamindex}{A path to the BAM file index. By default index file is expected to be present in the same directory. If not present it will be created.}
 
 \item{region}{A user defined region from where the methylation data will be extracted.}
 

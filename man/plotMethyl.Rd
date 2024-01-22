@@ -14,7 +14,7 @@ plotMethyl(
 )
 }
 \arguments{
-\item{bamfile}{A path to BAM containing methylation specific tags (MM and ML).}
+\item{bamfile}{A path to a BAM file containing methylation specific tags (MM and ML).}
 
 \item{region}{A user defined region from where the methylation data will be extracted.}
 
@@ -30,7 +30,8 @@ plotMethyl(
 A \code{\link{GRanges-class}} object with mirrored coordinates.
 }
 \description{
-Function to plot methylated cytosines from the BAM file in forward reference coordinates.
+This function takes loaded methylation porfiles using \code{\link{extractMethylCs}} function and visualize them 
+using basic \pkg{ggplot2} functions.
 }
 \examples{
 ## Get BAM file to plot
