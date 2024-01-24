@@ -16,7 +16,7 @@ plotMethyl(
 \arguments{
 \item{bamfile}{A path to a BAM file containing methylation specific tags (MM and ML).}
 
-\item{region}{A user defined region from where the methylation data will be extracted.}
+\item{region}{A user defined region to be extracted from the BAM.}
 
 \item{min.mapq}{A minimum mapping quality of aligned reads to be extracted from provided BAM file.}
 

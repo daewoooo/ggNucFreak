@@ -17,15 +17,19 @@ Imports:
   S4Vectors,
   methods,
   GenomicRanges,
+  plyranges,
   GenomicAlignments (>= 1.34.0),
   BSgenome,
   Biostrings,
   IRanges,
   GenomeInfoDb,
+  MatrixGenerics,
   Rsamtools,
   dplyr,
   magrittr,
-  utils
+  deepSNV,
+  utils,
+  zoo
 Suggests:
   BSgenome.Hsapiens.UCSC.hg38,
   BiocStyle,

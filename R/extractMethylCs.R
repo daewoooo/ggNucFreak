@@ -2,10 +2,12 @@
 #'
 #' @param bamfile A path to a BAM file containing methylation specific tags (MM and ML).
 #' @param bamindex A path to the BAM file index. By default index file is expected to be present in the same directory. If not present it will be created.
-#' @param region A user defined region from where the methylation data will be extracted.
+#' @param region A user defined region to be extracted from the BAM.
+#' @param secondary.aln Set to \code{TRUE} if secondary alignments should be retained.
+#' @param keep.duplicates Set to \code{TRUE} if duplicate reads should be retained.
 #' @param min.mapq A minimum mapping quality of aligned reads to be extracted from provided BAM file.
 #' @param add.phase Set to \code{TRUE} if phasing specific tag 'HP' should be added if defined in the BAM file.
-#' @importFrom Rsamtools indexBam ScanBamParam BamFile scanBam
+#' @importFrom Rsamtools indexBam scanBamFlag ScanBamParam BamFile scanBam
 #' @importFrom methods is as
 #' @importFrom GenomicAlignments readGAlignments mapFromAlignments
 #' @importFrom GenomicRanges sort disjointBins GRanges strand start end
@@ -26,7 +28,7 @@
 #' mCs <- extractMethylCs(bamfile = bam.file, region=region)
 #' mCs
 #'
-extractMethylCs <- function(bamfile=NULL, bamindex=bamfile, region=NULL, min.mapq=10, add.phase=FALSE) {
+extractMethylCs <- function(bamfile=NULL, bamindex=bamfile, region=NULL, secondary.aln=FALSE, keep.duplicates=FALSE, min.mapq=10, add.phase=FALSE) {
   ## Check user input
   bamindex.raw <- sub('\\.bai$', '', bamindex)
   bamindex <- paste0(bamindex.raw,'.bai')
@@ -47,15 +49,26 @@ extractMethylCs <- function(bamfile=NULL, bamindex=bamfile, region=NULL, min.map
     }
   }
 
-  ## Read in BAM [Genomic Alignments]
+  ## Read in BAM [Genomic Alignments] ##
+  ######################################
+  ## Define BAM flags to filter
+  flags <- Rsamtools::scanBamFlag(isSecondaryAlignment = secondary.aln,
+                                  isDuplicate = keep.duplicates)
+  
   if (!is.null(region)) {
     aln.data <- GenomicAlignments::readGAlignments(bamfile, index=bamindex,
                                                    param=Rsamtools::ScanBamParam(which=range(region.gr),
+                                                                                 flag = flags,
                                                                                  what=c('mapq', 'flag', 'seq', 'qname')))
   } else {
     aln.data <- GenomicAlignments::readGAlignments(bamfile, index=bamindex,
-                                                   param=Rsamtools::ScanBamParam(what=c('mapq', 'flag', 'seq', 'qname')))
+                                                   param=Rsamtools::ScanBamParam(flag = flags,
+                                                                                 what=c('mapq', 'flag', 'seq', 'qname')))
   }
+  ## Filter by mapping quality
+  if (min.mapq > 0) {
+    aln.data <- aln.data[mcols(aln.data)$mapq >= min.mapq]
+  } 
   ## Sort alignments
   aln.data <- GenomicRanges::sort(aln.data, ignore.strand = TRUE)
 

@@ -8,6 +8,8 @@ extractMethylCs(
   bamfile = NULL,
   bamindex = bamfile,
   region = NULL,
+  secondary.aln = FALSE,
+  keep.duplicates = FALSE,
   min.mapq = 10,
   add.phase = FALSE
 )
@@ -17,7 +19,11 @@ extractMethylCs(
 
 \item{bamindex}{A path to the BAM file index. By default index file is expected to be present in the same directory. If not present it will be created.}
 
-\item{region}{A user defined region from where the methylation data will be extracted.}
+\item{region}{A user defined region to be extracted from the BAM.}
+
+\item{secondary.aln}{Set to \code{TRUE} if secondary alignments should be retained.}
+
+\item{keep.duplicates}{Set to \code{TRUE} if duplicate reads should be retained.}
 
 \item{min.mapq}{A minimum mapping quality of aligned reads to be extracted from provided BAM file.}
 
