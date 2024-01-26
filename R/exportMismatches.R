@@ -3,7 +3,8 @@
 #' @param bamfile A path to a BAM file.
 #' @param add.phase Set to \code{TRUE} if phasing specific tag 'HP' should be added if defined in the BAM file.
 #' @param min.baseq A minimum base quality per aligned base to be retained.
-#' @param min.mismatches A minimum number of mismatch coverage to be reported.
+#' @param min.mismatch.count A minimum number of mismatched bases per position to be reported.
+#' @param min.mismatch.fraction A minimum proportion of mismatched bases per position to be reported.
 #' @param by.phase If set to \code{TRUE} mismatches will be reported per haplotype specific BAM tag ('HP').
 #' @param ref.fasta A path to a reference FASTA file to extract reference bases from.
 #' @param bsgenome A \pkg{\link[BSgenome]{BSgenome-class}} object of reference genome to get reference bases from.
@@ -30,7 +31,7 @@
 #' m.obj <- exportMismatches(bamfile = bam.file, region = region, bsgenome = BSgenome.Hsapiens.UCSC.hg38)
 #' m.obj
 #'
-exportMismatches <- function(bamfile=NULL, bamindex=bamfile, secondary.aln=FALSE, keep.duplicates=FALSE, region=NULL, min.mapq=10, min.baseq=20, min.mismatches=5, by.phase=FALSE, ref.fasta=NULL, bsgenome=NULL) {
+exportMismatches <- function(bamfile=NULL, bamindex=bamfile, secondary.aln=FALSE, keep.duplicates=FALSE, region=NULL, min.mapq=10, min.baseq=20, min.mismatch.count=NULL, min.mismatch.fraction=NULL, by.phase=FALSE, ref.fasta=NULL, bsgenome=NULL) {
   ## Helper function
   collapse.str <- function(x) {
     if (length(x) > 1) {
@@ -136,9 +137,13 @@ exportMismatches <- function(bamfile=NULL, bamindex=bamfile, secondary.aln=FALSE
     df.piles <- methods::as(piles, "data.frame")
     df.quals <- methods::as(quals, "data.frame")
     ## Filter by user defined minimum base quality
-    bases <- strsplit(df.piles[,1], "")
-    quals <- sapply(df.quals[,1], function(x) as.numeric(charToRaw(x))-33)
-    filtbases <- mapply(function(X,Y) { X[Y >= min.baseq] }, X=bases, Y=quals)
+    if (min.baseq > 0) {
+      bases <- strsplit(df.piles[,1], "")
+      quals <- sapply(df.quals[,1], function(x) as.numeric(charToRaw(x))-33)
+      bases <- mapply(function(X,Y) { X[Y >= min.baseq] }, X=bases, Y=quals)
+    } else {
+      bases <- strsplit(df.piles[,1], "")
+    }
     ## Keep only non-reference bases per position
     nonref.bases <- mapply(function(X,Y) { X[X != Y] }, X=bases, Y=ref.bases)
     nonref.bases <- lapply(nonref.bases, collapse.str)
@@ -146,10 +151,19 @@ exportMismatches <- function(bamfile=NULL, bamindex=bamfile, secondary.aln=FALSE
     nonref.bases <- Biostrings::DNAStringSet(do.call(c, nonref.bases))
     nonref.bases.counts <- Biostrings::alphabetFrequency(nonref.bases)
     nonref.bases.counts <- nonref.bases.counts[, c('A', 'C', 'G', 'T')]
-    ## Get mismatches
+
+    ## Filter mismatched position based on count or frequency
+    if (!is.null(min.mismatch.fraction)) {
+      mask <- (rowSums(nonref.bases.counts) / (lengths(bases) + 0.0000001)) >= min.mismatch.fraction
+      min.mismatch.count <- NULL
+    }
+    if (!is.null(min.mismatch.count)) {
+      #mask <- apply(nonref.bases.counts, 1, function(x) any(x >= min.mismatch.count))
+      mask <- rowSums(nonref.bases.counts) >= min.mismatch.count
+    }
     #mism.count <- rowSums(nonref.bases.counts)
     #mask <- mism.count > 0
-    mask <- apply(nonref.bases.counts, 1, function(x) any(x >= min.mismatches))
+
     ## Construct mismatch data.frame
     df <- as.data.frame(nonref.bases.counts[mask, , drop=FALSE])
     if (nrow(df) > 0) {
