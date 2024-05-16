@@ -15,7 +15,8 @@ plotNucFreq(
   nucleotide.content = NULL,
   bin.size = 1e+05,
   reverse = FALSE,
-  title = NULL
+  title = NULL,
+  return = "plot"
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ plotNucFreq(
 \item{reverse}{Set to \code{TRUE}}
 
 \item{title}{A user defined title of the final plot.}
+
+\item{return}{Define to return plot only `plot`, plotting data only `data` or both `c('plot', 'data')` (Default : `plot`).}
 }
 \value{
 A \code{ggplot} plot.

@@ -61,7 +61,7 @@ plotMismatches <- function(mismatches.obj, add.reference.base=FALSE, coverage.pr
     plt <- ggplot2::ggplot() +
       ggplot2::geom_step(data = cov.df, ggplot2::aes(x=pos - 0.5, y=cov))
   } else if (coverage.profile == 'fill') {
-    cov.gr <- collapseBins(cov.gr, id.field = 1)
+    #cov.gr <- collapseBins(sort(cov.gr), id.field = 1)
     cov.ranges.df <- as.data.frame(cov.gr)
 
     plt <- ggplot2::ggplot() +
