@@ -12,7 +12,8 @@ exportMismatches(
   region = NULL,
   min.mapq = 10,
   min.baseq = 20,
-  min.mismatches = 5,
+  min.mismatch.count = NULL,
+  min.mismatch.fraction = NULL,
   by.phase = FALSE,
   ref.fasta = NULL,
   bsgenome = NULL
@@ -23,7 +24,9 @@ exportMismatches(
 
 \item{min.baseq}{A minimum base quality per aligned base to be retained.}
 
-\item{min.mismatches}{A minimum number of mismatch coverage to be reported.}
+\item{min.mismatch.count}{A minimum number of mismatched bases per position to be reported.}
+
+\item{min.mismatch.fraction}{A minimum proportion of mismatched bases per position to be reported.}
 
 \item{by.phase}{If set to \code{TRUE} mismatches will be reported per haplotype specific BAM tag ('HP').}
 
