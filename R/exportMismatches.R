@@ -1,7 +1,9 @@
 #' Function to extract positions of mismatched bases from the BAM file with respect to the reference.
 #'
 #' @param bamfile A path to a BAM file.
-#' @param add.phase Set to \code{TRUE} if phasing specific tag 'HP' should be added if defined in the BAM file.
+#' @param secondary.aln Set to \code{TRUE} if secondary read alignments should be kept.
+#' @param keep.duplicates Set to \code{TRUE} if PCR duplicates should be kept. 
+#' @param region A \pkg{\link[GenomicRanges]{GRanges-class}} object containing a region from where reads will be extracted.
 #' @param min.baseq A minimum base quality per aligned base to be retained.
 #' @param min.mismatch.count A minimum number of mismatched bases per position to be reported.
 #' @param min.mismatch.fraction A minimum proportion of mismatched bases per position to be reported.
@@ -185,6 +187,7 @@ exportMismatches <- function(bamfile=NULL, bamindex=bamfile, secondary.aln=FALSE
   cov.df <- do.call(rbind, cov.l)
 
   ## Return
+  mism.df <- mism.df[mism.df$value > 0,]
   return(list(mismatches = mism.df, coverage = cov.df))
 }
 

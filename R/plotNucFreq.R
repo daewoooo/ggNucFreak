@@ -178,6 +178,7 @@ plotNucFreq <- function(bamfile = NULL, region = NULL, max.data.points = 100000,
     }
   } else {
     plt <- ggplot2::ggplot()
+    plt.data <- NULL
     message("Failed to extract read pileups from a BAM file ", bamfile, "\n", "corresponding to region ", as.character(region.gr), ", returning empty plot !!!")
   }  
 
